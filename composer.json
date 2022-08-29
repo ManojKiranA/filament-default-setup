@@ -1,0 +1,53 @@
+{
+    "name": "manojkiran/filament-default-setup",
+    "description": "The default setup and config that I use along with every filament installation",
+    "keywords": [
+        "manojkiran",
+        "filament-default-setup"
+    ],
+    "homepage": "https://github.com/manojkiran/filament-default-setup",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Manojkiran",
+            "email": "manojkiran10031998@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "filament/filament": "^2.15",
+        "illuminate/support": "^8.0|^9.0",
+        "illuminate/database": "^8.0|^9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Manojkiran\\FilamentDefaultSetup\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Manojkiran\\FilamentDefaultSetup\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Manojkiran\\FilamentDefaultSetup\\FilamentDefaultSetupServiceProvider"
+            ]
+        }
+    }
+}
