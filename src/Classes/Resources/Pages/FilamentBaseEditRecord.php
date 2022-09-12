@@ -81,12 +81,12 @@ class FilamentBaseEditRecord extends EditRecord
 
     protected function getSavedNotificationMessage(): ?string
     {
-        return Str::of(static::getResource()::getLabel())->append(' ')->append('Updated')->__toString();
+        return Str::of(static::getResource()::getModelLabel())->append(' ')->append('Updated')->__toString();
     }
 
     protected function getTitle(): string
-    {
-        return Str::of(static::getResource()::getModelLabel())
+    {       
+        return Str::of($this->getRecordTitle())
         ->append(' ')
         ->append('-')
         ->append(' ')
@@ -99,6 +99,6 @@ class FilamentBaseEditRecord extends EditRecord
             ->append(' ')
             ->append('-')
             ->append(' ')
-            ->append(static::getResource()::getModelLabel());
+            ->append($this->getRecordTitle());
     }
 }

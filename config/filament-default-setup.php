@@ -23,7 +23,7 @@ return [
     'filament' => [
         'tables' => [
             'per_page_select_options' => [
-                5, 10, 25, 50,
+                5, 10, 25, 50, -1,
             ],
         ],
     ],

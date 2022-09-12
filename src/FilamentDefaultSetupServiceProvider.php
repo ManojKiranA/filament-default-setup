@@ -2,7 +2,12 @@
 
 namespace Manojkiran\FilamentDefaultSetup;
 
+use Filament\Tables\Actions\CreateAction as TableCreateAction;
+use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
+use Filament\Tables\Actions\EditAction as TableEditAction;
+use Filament\Tables\Actions\ViewAction as TableViewAction;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class FilamentDefaultSetupServiceProvider extends ServiceProvider
 {
@@ -11,6 +16,57 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        TableCreateAction::configureUsing(function (TableCreateAction $tableCreateAction) {
+            return $tableCreateAction
+                ->disableCreateAnother()
+                ->label('Add')
+                ->successNotificationMessage(function(TableCreateAction $action){
+                    return Str::of($action->getModelLabel())
+                    ->append(' ')
+                    ->append('Created')
+                    ->__toString();
+                })
+                ->tooltip(function (TableCreateAction $action) {
+                    return Str::of('Create')
+                        ->append(' ')
+                        ->append($action->getModelLabel());
+                });
+        }, isImportant:true);
+
+        TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
+            return $tableEditAction
+                ->iconButton()
+                ->icon('heroicon-o-pencil-alt')
+                ->label('Edit')
+                ->color('primary')
+                ->successNotificationMessage(function(TableEditAction $action){
+                    return Str::of($action->getModelLabel())
+                    ->append(' ')
+                    ->append('Updated')
+                    ->__toString();
+                })
+                ->tooltip('Edit');
+
+        }, isImportant:true);
+
+        TableViewAction::configureUsing(function (TableViewAction $tableViewAction) {
+            return $tableViewAction
+                ->iconButton()
+                ->color('primary')
+                ->icon('heroicon-o-eye')
+                ->label('View')
+                ->tooltip('View');
+
+        }, isImportant:true);
+
+        TableDeleteAction::configureUsing(function (TableDeleteAction $tableDeleteAction) {
+            return $tableDeleteAction
+                ->iconButton()
+                ->icon('heroicon-o-trash')
+                ->label('Delete')
+                ->tooltip('Delete');
+        }, isImportant:true);
+
         /*
          * Optional methods to load your package assets
          */
@@ -21,22 +77,22 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/filament-default-setup.php' => config_path('filament-default-setup.php'),
+                __DIR__ . '/../config/filament-default-setup.php' => config_path('filament-default-setup.php'),
             ], 'config');
 
             // Publishing the views.
             /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/filament-default-setup'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/filament-default-setup'),
             ], 'views');*/
 
             // Publishing assets.
             /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/filament-default-setup'),
+            __DIR__.'/../resources/assets' => public_path('vendor/filament-default-setup'),
             ], 'assets');*/
 
             // Publishing the translation files.
             /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/filament-default-setup'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/filament-default-setup'),
             ], 'lang');*/
 
             // Registering package commands.
@@ -50,6 +106,6 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/filament-default-setup.php', 'filament-default-setup');
+        $this->mergeConfigFrom(__DIR__ . '/../config/filament-default-setup.php', 'filament-default-setup');
     }
 }

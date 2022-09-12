@@ -51,7 +51,7 @@ class FilamentBaseListRecords extends ListRecords
                 ->modalButton('Delete')
                 ->action(function ($record) {
                     $record->delete();
-                    Filament::notify('success', Str::of(static::getResource()::getLabel())->append(' ')->append('Deleted')->toString());
+                    Filament::notify('success', Str::of(static::getResource()::getModelLabel())->append(' ')->append('Deleted')->toString());
                 })
                 ->visible(fn($record): bool => static::getResource()::canView($record) && static::getResource()::hasPage('view')),
         ];

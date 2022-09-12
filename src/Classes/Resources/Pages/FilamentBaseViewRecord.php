@@ -23,10 +23,10 @@ class FilamentBaseViewRecord extends ViewRecord
                 ->tooltip('Edit')
                 ->label('Edit')
                 ->iconPosition('before')
-                ->color('danger')
-                ->icon('heroicon-o-arrow-circle-left')
+                ->color('success')
+                ->icon('heroicon-o-pencil')
                 ->visible($hasEditPagePermission && $hasEditPage)
-                ->url($hasEditPage ? static::getResource()::canEdit($this->record) : null),
+                ->url($hasEditPage ? static::getResource()::getUrl('edit', ['record' => $this->record]) : null),
 
             Action::make('view_page_back_action')
                 ->iconButton()
@@ -53,8 +53,8 @@ class FilamentBaseViewRecord extends ViewRecord
     }
 
     protected function getTitle(): string
-    {
-        return Str::of(static::getResource()::getModelLabel())
+    {       
+        return Str::of($this->getRecordTitle())
         ->append(' ')
         ->append('-')
         ->append(' ')
@@ -67,6 +67,6 @@ class FilamentBaseViewRecord extends ViewRecord
             ->append(' ')
             ->append('-')
             ->append(' ')
-            ->append(static::getResource()::getModelLabel());
+            ->append($this->getRecordTitle());
     }
 }
