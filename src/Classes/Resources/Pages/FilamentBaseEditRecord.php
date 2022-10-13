@@ -3,10 +3,12 @@
 namespace Manojkiran\FilamentDefaultSetup\Classes\Resources\Pages;
 
 
-use Filament\Pages\Actions\Action;
-use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Filament\Pages\Actions\Action;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
+use Illuminate\Validation\ValidationException;
 
 class FilamentBaseEditRecord extends EditRecord
 {
@@ -100,5 +102,18 @@ class FilamentBaseEditRecord extends EditRecord
             ->append('-')
             ->append(' ')
             ->append($this->getRecordTitle());
+    }
+
+    protected function onValidationError(ValidationException $exception): void
+    {
+        collect($exception->validator->getMessageBag()->getMessages())
+            ->map(function ($messagesArray) {
+                Notification::make()
+                    ->title('Validation Error')
+                    ->body(Arr::first($messagesArray))
+                    ->danger()
+                    ->icon('heroicon-o-exclamation')
+                    ->send();
+            });
     }
 }

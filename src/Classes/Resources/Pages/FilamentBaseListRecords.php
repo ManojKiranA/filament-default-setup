@@ -6,6 +6,7 @@ use Closure;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\EditAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -22,13 +23,15 @@ class FilamentBaseListRecords extends ListRecords
     {
         return [
 
-            Action::make('list_page_edit_action')
-                ->iconButton()
-                ->tooltip('Edit')
-                ->label('Edit')
-                ->icon('heroicon-o-pencil-alt')
-                ->visible(fn($record): bool => static::getResource()::canEdit($record) && static::getResource()::hasPage('edit'))
-                ->url(fn($record): string => static::getResource()::hasPage('edit') ? static::getResource()::getUrl('edit', ['record' => $record]) : null),
+            EditAction::make('list_page_edit_action'),
+
+            // Action::make('list_page_edit_action')
+            //     ->iconButton()
+            //     ->tooltip('Edit')
+            //     ->label('Edit')
+            //     ->icon('heroicon-o-pencil-alt')
+            //     ->visible(fn($record): bool => static::getResource()::canEdit($record) && static::getResource()::hasPage('edit'))
+            //     ->url(fn($record): string => static::getResource()::hasPage('edit') ? static::getResource()::getUrl('edit', ['record' => $record]) : null),
 
             Action::make('list_page_view_action')
                 ->iconButton()
@@ -53,7 +56,7 @@ class FilamentBaseListRecords extends ListRecords
                     $record->delete();
                     Filament::notify('success', Str::of(static::getResource()::getModelLabel())->append(' ')->append('Deleted')->toString());
                 })
-                ->visible(fn($record): bool => static::getResource()::canView($record) && static::getResource()::hasPage('view')),
+                ->visible(fn($record): bool => static::getResource()::canDelete($record)),
         ];
     }
 

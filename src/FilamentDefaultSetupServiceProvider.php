@@ -19,19 +19,19 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
         TableCreateAction::configureUsing(function (TableCreateAction $tableCreateAction) {
             return $tableCreateAction
                 ->disableCreateAnother()
-                ->label('Add')
-                ->successNotificationMessage(function(TableCreateAction $action){
-                    return Str::of($action->getModelLabel())
-                    ->append(' ')
-                    ->append('Created')
-                    ->__toString();
-                })
-                ->tooltip(function (TableCreateAction $action) {
+                // ->modalWidth('screen')
+                // ->slideOver()
+                ->label(function (TableCreateAction $action) {
                     return Str::of('Create')
                         ->append(' ')
                         ->append($action->getModelLabel());
+                })
+                ->successNotificationMessage(function (TableCreateAction $action) {
+                    return Str::of($action->getModelLabel())
+                        ->append(' ')
+                        ->append('Created');
                 });
-        }, isImportant:true);
+        }, null, true);
 
         TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
             return $tableEditAction
@@ -39,15 +39,14 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->icon('heroicon-o-pencil-alt')
                 ->label('Edit')
                 ->color('primary')
-                ->successNotificationMessage(function(TableEditAction $action){
+                ->successNotificationMessage(function (TableEditAction $action) {
                     return Str::of($action->getModelLabel())
-                    ->append(' ')
-                    ->append('Updated')
-                    ->__toString();
+                        ->append(' ')
+                        ->append('Updated');
                 })
                 ->tooltip('Edit');
 
-        }, isImportant:true);
+        }, null, true);
 
         TableViewAction::configureUsing(function (TableViewAction $tableViewAction) {
             return $tableViewAction
@@ -57,7 +56,7 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->label('View')
                 ->tooltip('View');
 
-        }, isImportant:true);
+        }, null, true);
 
         TableDeleteAction::configureUsing(function (TableDeleteAction $tableDeleteAction) {
             return $tableDeleteAction
@@ -65,7 +64,7 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->icon('heroicon-o-trash')
                 ->label('Delete')
                 ->tooltip('Delete');
-        }, isImportant:true);
+        }, null, true);
 
         /*
          * Optional methods to load your package assets
