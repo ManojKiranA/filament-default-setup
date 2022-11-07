@@ -123,7 +123,6 @@ class FilamentBaseListRecords extends ListRecords
             ->append($this->getTableSearchQuery())
             ->append(' ]');
         }
-
         return Str::of('No ')
             ->append(static::getResource()::getPluralModelLabel())
             ->append(' yet');

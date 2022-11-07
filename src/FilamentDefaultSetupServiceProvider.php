@@ -40,6 +40,7 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
         TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
             return $tableEditAction
                 ->iconButton()
+                ->openUrlInNewTab()
                 ->icon('heroicon-o-pencil-alt')
                 ->label('Edit')
                 ->color('primary')
