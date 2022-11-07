@@ -103,6 +103,7 @@ class FilamentBaseListRecords extends ListRecords
     protected function getTableEmptyStateDescription(): ?string
     {
         if (Arr::has(static::getResource()::getPages(), 'create') && static::getResource()::canCreate()) {
+            // dd($this->getTableSearchQuery());
             return Str::of('You may create a')
                 ->append(' ')
                 ->append(static::getResource()::getModelLabel())
@@ -115,6 +116,14 @@ class FilamentBaseListRecords extends ListRecords
 
     protected function getTableEmptyStateHeading(): ?string
     {
+        if($this->getTableSearchQuery()){
+        return Str::of('There are no results that match your search term')
+            ->append(' ')
+            ->append('[ ')
+            ->append($this->getTableSearchQuery())
+            ->append(' ]');
+        }
+
         return Str::of('No ')
             ->append(static::getResource()::getPluralModelLabel())
             ->append(' yet');
