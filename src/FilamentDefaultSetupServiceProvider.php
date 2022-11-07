@@ -2,6 +2,9 @@
 
 namespace Manojkiran\FilamentDefaultSetup;
 
+use Filament\Forms\Components\Component;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\CreateAction as TableCreateAction;
 use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
 use Filament\Tables\Actions\EditAction as TableEditAction;
@@ -21,6 +24,7 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->disableCreateAnother()
                 // ->modalWidth('screen')
                 // ->slideOver()
+                //@todo move to config
                 ->label(function (TableCreateAction $action) {
                     return Str::of('Create')
                         ->append(' ')
@@ -65,6 +69,19 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->label('Delete')
                 ->tooltip('Delete');
         }, null, true);
+
+
+        Select::configureUsing(function(Select $select){
+            return $select
+            ->validationAttribute(fn (Component $component) => $component->getLabel())
+            ->placeholder(fn (Component $component) => Str::of('Select')->append(' ')->append('a')->append(' ')->append($component->getLabel()));
+        },null,true);
+
+        TextInput::configureUsing(function(TextInput $textInput){
+            return $textInput
+            ->validationAttribute(fn (Component $component) => $component->getLabel())
+            ->placeholder(fn (Component $component) => Str::of('Enter')->append(' ')->append($component->getLabel()));
+        },null,true);
 
         /*
          * Optional methods to load your package assets
