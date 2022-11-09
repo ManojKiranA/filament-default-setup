@@ -75,7 +75,9 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
         Select::configureUsing(function(Select $select){
             return $select
             ->validationAttribute(fn (Component $component) => $component->getLabel())
-            ->placeholder(fn (Component $component) => Str::of('Select')->append(' ')->append('a')->append(' ')->append($component->getLabel()));
+            ->placeholder(fn (Component $component) => Str::of('Select')->append(' ')->append('a')->append(' ')->append($component->getLabel()))
+            ->loadingMessage(fn (Component $component) => Str::of('Loading')->append(' ')->append(Str::plural($component->getLabel()))->append('...'))
+            ;
         },null,true);
 
         TextInput::configureUsing(function(TextInput $textInput){
