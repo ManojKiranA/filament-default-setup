@@ -8,6 +8,11 @@ use Illuminate\Support\Str;
 
 class FilamentBaseResource extends Resource
 {
+    protected static function getActiveNavigationIcon(): string
+    {
+        return Str::of(static::getNavigationIcon())->replace(['-o-'],['-s-']);
+    }
+
     public static function getGlobalSearchResultUrl(Model $record): string
     {
         return static::getUrl('view', ['record' => $record]);
