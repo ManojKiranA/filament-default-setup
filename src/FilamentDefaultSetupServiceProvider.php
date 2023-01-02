@@ -9,6 +9,7 @@ use Filament\Tables\Actions\CreateAction as TableCreateAction;
 use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
 use Filament\Tables\Actions\EditAction as TableEditAction;
 use Filament\Tables\Actions\ViewAction as TableViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -40,7 +41,6 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
         TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
             return $tableEditAction
                 ->iconButton()
-                ->openUrlInNewTab()
                 ->icon('heroicon-o-pencil-alt')
                 ->label('Edit')
                 ->color('primary')
@@ -71,20 +71,25 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
                 ->tooltip('Delete');
         }, null, true);
 
-
-        Select::configureUsing(function(Select $select){
+        Select::configureUsing(function (Select $select) {
             return $select
-            ->validationAttribute(fn (Component $component) => $component->getLabel())
-            ->placeholder(fn (Component $component) => Str::of('Select')->append(' ')->append('a')->append(' ')->append($component->getLabel()))
-            ->loadingMessage(fn (Component $component) => Str::of('Loading')->append(' ')->append(Str::plural($component->getLabel()))->append('...'))
+                ->validationAttribute(fn(Component $component) => $component->getLabel())
+                ->placeholder(fn(Component $component) => Str::of('Select')->append(' ')->append('a')->append(' ')->append($component->getLabel()))
+                ->loadingMessage(fn(Component $component) => Str::of('Loading')->append(' ')->append(Str::plural($component->getLabel()))->append('...'))
             ;
-        },null,true);
+        }, null, true);
 
-        TextInput::configureUsing(function(TextInput $textInput){
+        TextInput::configureUsing(function (TextInput $textInput) {
             return $textInput
-            ->validationAttribute(fn (Component $component) => $component->getLabel())
-            ->placeholder(fn (Component $component) => Str::of('Enter')->append(' ')->append($component->getLabel()));
-        },null,true);
+                ->validationAttribute(fn(Component $component) => $component->getLabel())
+                ->placeholder(fn(Component $component) => Str::of('Enter')->append(' ')->append($component->getLabel()));
+        }, null, true);
+
+        TextColumn::configureUsing(function (TextColumn $textColumn) {
+            return $textColumn
+                ->copyMessage(fn(TextColumn $column) => Str::of($column->getLabel())->finish(' ')->append('Copied to clipboard'))
+                ->copyMessageDuration(800);
+        }, null, true);
 
         /*
          * Optional methods to load your package assets

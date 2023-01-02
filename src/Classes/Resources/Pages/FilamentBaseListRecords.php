@@ -7,7 +7,6 @@ use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -116,12 +115,12 @@ class FilamentBaseListRecords extends ListRecords
 
     protected function getTableEmptyStateHeading(): ?string
     {
-        if($this->getTableSearchQuery()){
-        return Str::of('There are no results that match your search term')
-            ->append(' ')
-            ->append('[ ')
-            ->append($this->getTableSearchQuery())
-            ->append(' ]');
+        if ($this->getTableSearchQuery()) {
+            return Str::of('There are no results that match your search term')
+                ->append(' ')
+                ->append('[ ')
+                ->append($this->getTableSearchQuery())
+                ->append(' ]');
         }
         return Str::of('No ')
             ->append(static::getResource()::getPluralModelLabel())
@@ -141,10 +140,12 @@ class FilamentBaseListRecords extends ListRecords
     protected function getTableQueryStringIdentifier(): string
     {
         return (string) Str::of(static::getResource()::getModel())
-            ->basename()
+            ->remove(['App\\Models\\', 'App/Models/'])
+            ->remove(['//', '\\', DIRECTORY_SEPARATOR])
             ->pluralStudly()
             ->snake()
             ->finish('_');
+
     }
 
     protected function getIdentifiedTableQueryStringPropertyNameFor(string $property): string
