@@ -2,44 +2,21 @@
 
 namespace Manojkiran\FilamentDefaultSetup\Classes\Resources\Pages;
 
-
+use Filament\Notifications\Notification;
+use Filament\Pages\Actions\Action;
+use Filament\Pages\Actions\DeleteAction;
+use Filament\Pages\Actions\ViewAction;
+use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Filament\Pages\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Resources\Pages\EditRecord;
 use Illuminate\Validation\ValidationException;
 
 class FilamentBaseEditRecord extends EditRecord
 {
     public function getActions(): array
     {
-        $hasIndexPage = static::getResource()::hasPage('index');
-        $hasIndexPagePermission = static::getResource()::canViewAny();
-
-        $hasViewPage = static::getResource()::hasPage('view');
-        $hasViewPagePermission = static::getResource()::canView($this->record);
-
         return [
-            
-            Action::make('edit_page_show_action')
-                ->iconButton()
-                ->tooltip('Back')
-                ->label('Back')
-                ->color('primary')
-                ->icon('heroicon-o-eye')
-                ->visible($hasViewPagePermission && $hasViewPage)
-                ->url($hasViewPage ? static::getResource()::getUrl('view', ['record' => $this->record]) : null),
-
-            Action::make('edit_page_back_action')
-                ->iconButton()
-                ->tooltip('Back')
-                ->label('Back')
-                ->iconPosition('before')
-                ->color('danger')
-                ->icon('heroicon-o-arrow-circle-left')
-                ->visible($hasIndexPage && $hasIndexPagePermission)
-                ->url($hasIndexPage ? static::getResource()::getUrl('index') : null),
+            ViewAction::make('edit_page_view_action'),
         ];
     }
 
@@ -63,16 +40,14 @@ class FilamentBaseEditRecord extends EditRecord
     protected function getFormActions(): array
     {
         return [
-            Action::make('edit_page_form_save_action')
-                ->button()
-                ->iconPosition('before')
+            $this->getSaveFormAction()
                 ->label('Update')
-                ->submit('save'),
-
-                 Action::make('cancel')
+                ->icon('heroicon-o-save')
+                ->color('primary'),
+            $this->getCancelFormAction()
                 ->label('Cancel')
-                ->url(static::getResource()::getUrl())
-                ->color('secondary'),
+                ->color('danger')
+                ->icon('heroicon-o-x-circle'),
         ];
     }
 
@@ -87,12 +62,12 @@ class FilamentBaseEditRecord extends EditRecord
     }
 
     protected function getTitle(): string
-    {       
+    {
         return Str::of($this->getRecordTitle())
-        ->append(' ')
-        ->append('-')
-        ->append(' ')
-        ->append('Edit');
+            ->append(' ')
+            ->append('-')
+            ->append(' ')
+            ->append('Edit');
     }
 
     protected function getHeading(): string

@@ -10,7 +10,7 @@ class FilamentBaseResource extends Resource
 {
     protected static function getActiveNavigationIcon(): string
     {
-        return Str::of(static::getNavigationIcon())->replace(['-o-'],['-s-']);
+        return Str::of(static::getNavigationIcon())->replace(['heroicon-o-'],['heroicon-s-']);
     }
 
     public static function getGlobalSearchResultUrl(Model $record): string
@@ -26,5 +26,10 @@ class FilamentBaseResource extends Resource
             ])
             ->map(fn ($each) => Str::of($each)->lower()->slug('-')->toString())
             ->implode('/');
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return static::getPluralModelLabel();
     }
 }

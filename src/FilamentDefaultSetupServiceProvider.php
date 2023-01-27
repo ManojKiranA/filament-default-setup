@@ -5,6 +5,9 @@ namespace Manojkiran\FilamentDefaultSetup;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Pages\Actions\ViewAction as PageViewAction;
+use Filament\Pages\Actions\EditAction as PageEditAction;
+use Filament\Pages\Actions\DeleteAction as PageDeleteAction;
 use Filament\Tables\Actions\CreateAction as TableCreateAction;
 use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
 use Filament\Tables\Actions\EditAction as TableEditAction;
@@ -20,41 +23,10 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        TableCreateAction::configureUsing(function (TableCreateAction $tableCreateAction) {
-            return $tableCreateAction
-                ->disableCreateAnother()
-                // ->modalWidth('screen')
-                // ->slideOver()
-                //@todo move to config
-                ->label(function (TableCreateAction $action) {
-                    return Str::of('Create')
-                        ->append(' ')
-                        ->append($action->getModelLabel());
-                })
-                ->successNotificationMessage(function (TableCreateAction $action) {
-                    return Str::of($action->getModelLabel())
-                        ->append(' ')
-                        ->append('Created');
-                });
-        }, null, true);
+        $this->bootTableActions();
 
-        TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
-            return $tableEditAction
-                ->iconButton()
-                ->icon('heroicon-o-pencil-alt')
-                ->label('Edit')
-                ->color('primary')
-                ->successNotificationMessage(function (TableEditAction $action) {
-                    return Str::of($action->getModelLabel())
-                        ->append(' ')
-                        ->append('Updated');
-                })
-                ->tooltip('Edit');
-
-        }, null, true);
-
-        TableViewAction::configureUsing(function (TableViewAction $tableViewAction) {
-            return $tableViewAction
+        PageViewAction::configureUsing(function (PageViewAction $pageViewAction) {
+            return $pageViewAction
                 ->iconButton()
                 ->color('primary')
                 ->icon('heroicon-o-eye')
@@ -63,12 +35,29 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
 
         }, null, true);
 
-        TableDeleteAction::configureUsing(function (TableDeleteAction $tableDeleteAction) {
-            return $tableDeleteAction
+        PageEditAction::configureUsing(function (PageEditAction $pageEditAction) {
+            return $pageEditAction
+               ->iconButton()
+                ->icon('heroicon-o-pencil-alt')
+                ->label('Edit')
+                ->color('primary')
+                ->tooltip('Edit');
+
+        }, null, true);
+
+        //
+
+        PageDeleteAction::configureUsing(function (PageDeleteAction $pageDeleteAction) {
+            return $pageDeleteAction
                 ->iconButton()
                 ->icon('heroicon-o-trash')
                 ->label('Delete')
-                ->tooltip('Delete');
+                ->tooltip('Delete')
+                ->successNotificationMessage(function (PageDeleteAction $action) {
+                    return Str::of($action->getModelLabel())
+                        ->append(' ')
+                        ->append('Deleted');
+                });
         }, null, true);
 
         Select::configureUsing(function (Select $select) {
@@ -132,4 +121,65 @@ class FilamentDefaultSetupServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/filament-default-setup.php', 'filament-default-setup');
     }
+
+    public function bootTableActions()
+    {
+        TableCreateAction::configureUsing(function (TableCreateAction $tableCreateAction) {
+            return $tableCreateAction
+                ->disableCreateAnother()
+                ->modalWidth('screen')
+                ->slideOver()
+                ->icon('heroicon-o-plus-circle')
+                ->label(function (TableCreateAction $action) {
+                    return Str::of('Create')
+                        ->append(' ')
+                        ->append($action->getModelLabel());
+                })
+                ->successNotificationMessage(function (TableCreateAction $action) {
+                    return Str::of($action->getModelLabel())
+                        ->append(' ')
+                        ->append('Created');
+                });
+        }, null, true);
+
+        TableEditAction::configureUsing(function (TableEditAction $tableEditAction) {
+            return $tableEditAction
+                ->iconButton()
+                ->icon('heroicon-o-pencil-alt')
+                ->label('Edit')
+                ->color('primary')
+                ->successNotificationMessage(function (TableEditAction $action) {
+                    return Str::of($action->getModelLabel())
+                        ->append(' ')
+                        ->append('Updated');
+                })
+                ->tooltip('Edit');
+
+        }, null, true);
+
+        TableViewAction::configureUsing(function (TableViewAction $tableViewAction) {
+            return $tableViewAction
+                ->iconButton()
+                ->color('primary')
+                ->icon('heroicon-o-eye')
+                ->label('View')
+                ->tooltip('View');
+
+        }, null, true);
+
+        TableDeleteAction::configureUsing(function (TableDeleteAction $tableDeleteAction) {
+            return $tableDeleteAction
+                ->iconButton()
+                ->icon('heroicon-o-trash')
+                ->label('Delete')
+                ->tooltip('Delete')
+                ->successNotificationMessage(function (TableDeleteAction $action) {
+                    return Str::of($action->getModelLabel())
+                        ->append(' ')
+                        ->append('Deleted');
+                });
+        }, null, true);
+
+    }
+
 }

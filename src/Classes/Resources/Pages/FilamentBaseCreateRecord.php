@@ -2,33 +2,14 @@
 
 namespace Manojkiran\FilamentDefaultSetup\Classes\Resources\Pages;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Filament\Pages\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class FilamentBaseCreateRecord extends CreateRecord
 {
-    public function getActions(): array
-    {
-        $hasIndexPage = static::getResource()::hasPage('index');
-        $hasIndexPagePermission = static::getResource()::canViewAny();
-
-        return [
-            Action::make('create_page_back_action')
-                ->iconButton()
-                ->tooltip('Back')
-                ->label('Back')
-                ->iconPosition('before')
-                ->color('danger')
-                ->icon('heroicon-o-arrow-circle-left')
-                ->visible($hasIndexPage && $hasIndexPagePermission)
-                ->url($hasIndexPage ? static::getResource()::getUrl('index') : null),
-        ];
-    }
-
     public function getBreadcrumb(): string
     {
         return 'Create';
@@ -44,15 +25,18 @@ class FilamentBaseCreateRecord extends CreateRecord
     protected function getFormActions(): array
     {
         return [
-            Action::make('create_page_form_save_action')
-                ->iconPosition('before')
+            $this->getCreateFormAction()
                 ->label('Save')
-                ->submit('create'),
-
-            Action::make('create_page_form_cancel_action')
+                ->icon('heroicon-o-save')
+                ->color('primary'),
+            $this->getCreateAnotherFormAction()
+                ->label('Save & Create another')
+                ->icon('heroicon-o-save-as')
+                ->color('primary'),
+            $this->getCancelFormAction()
                 ->label('Cancel')
-                ->url(static::getResource()::getUrl('index'))
-                ->color('secondary'),
+                ->color('danger')
+                ->icon('heroicon-o-x-circle'),
         ];
     }
 
